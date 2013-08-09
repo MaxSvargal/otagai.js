@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .col-8
+        block main
+      .col-4
+        .well.sidebar-nav
+          ul.nav.nav-pills.nav-stacked
+            li
+              a(href='/articles/') List articles
+            li
+              a(href='/articles/new') New article

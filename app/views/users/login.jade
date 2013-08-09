@@ -1,0 +1,23 @@
+extends ../layout
+
+block title
+  | Login
+
+block content
+  h2 Please log in
+
+  if message != ''
+    .alert.alert-error= message
+
+  form(action='/login', method='post')
+
+    p
+      label(for='username') Username<br />
+      input#username(name='username', type='text')
+
+    p
+      label(for='username') Password<br />
+      input#password(name='password', type='password')
+  
+    p
+      input.btn.btn-primary(type='submit', value='Log in')

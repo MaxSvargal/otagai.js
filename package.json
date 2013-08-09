@@ -1,0 +1,39 @@
+{
+  "name": "otagai",
+  "author": "MaxSvargal <maxsvargal@gmail.com>",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node server"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "dependencies": {
+    "express": "latest",
+    "jade": "latest",
+    "coffee-script": "latest",
+    "mongoose": "latest",
+    "connect-mongo": "latest",
+    "connect-assets": "latest",
+    "passport": "latest",
+    "passport-local": "latest",
+    "bcrypt": "latest",
+    "underscore": "latest",
+    "connect-flash": "latest",
+    "view-helpers": "latest",
+    "stylus": "latest",
+    "nib": "latest",
+    "moment": "latest",
+    "marked": "latest",
+    "grunt-bg-shell": "latest",
+    "fluidity": "latest"
+  },
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-coffeelint": "latest",
+    "node-dev": "latest",
+    "grunt-contrib-watch": "latest"
+  }
+}

@@ -1,0 +1,30 @@
+extends base
+
+block content
+  - var action = '/articles'
+  if (!article.isNew)
+    - action += '/'+article.id
+  
+  form(action=action, method='post')
+    if(!article.isNew)
+      input(type='hidden', name='_method', value='put')
+
+    .form-group
+      label Title
+      input.form-control(name='title', type='text', value=article.title)
+  
+    .form-group
+      label Body
+      textarea.form-control(name='body', rows=20, placeholder='Use Markdown syntax')=article.body
+        
+    .form-group
+      label Tags
+      input.form-control(name='tags', type='text', value=article.tags, placeholder='Enter tags, comma seperated')
+    
+    .form-group.pics
+      label Images
+      input#attch_btn(type='file')
+      #upl_imgs
+
+    p
+      button.btn.btn-primary(type='submit') Save article
