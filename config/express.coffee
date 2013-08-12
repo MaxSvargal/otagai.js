@@ -6,9 +6,9 @@ path = require('path')
 stylus = require('stylus')
 fluidity = require('fluidity')
 
-assets = __dirname + '../assets'
-
 module.exports = (app, config, passport) ->
+  assets = config.root + '/assets'
+  
   app.set('showStackError', true)
 
   app.use(express.compress({
