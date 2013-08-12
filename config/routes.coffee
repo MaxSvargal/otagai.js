@@ -1,7 +1,13 @@
 module.exports = (app, passport, auth) ->
   
+  # Include controllers
+  fs = require 'fs'
+  controllers_path = config.root + '/app/controllers'
+  fs.readdirSync(controllers_path).forEach (file) ->
+    @[file.slice(0, -7)] = require "#{controllers_path}/#{file}"
+
+
   # User routes
-  users = require '../app/controllers/users'
   app.get '/login', users.login
 
   app.post '/login', passport.authenticate('local',
@@ -23,7 +29,6 @@ module.exports = (app, passport, auth) ->
   app.param 'userId', users.user
 
   # Article routes
-  articles = require '../app/controllers/articles'
   app.get '/', articles.index
   app.get '/articles', articles.manage
   app.get '/articles/new', auth.requiresLogin, articles.new
