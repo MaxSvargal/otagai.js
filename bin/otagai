@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+require('better-require')();
+
+var otagai = require('../otagai')('coffee');
+	args = process.argv.slice(2)
+
+if (!args.length) {
+  console.log('Usage: node-dev [options] script [arguments]\n')
+  process.exit(1)
+}
+
+otagai(args)

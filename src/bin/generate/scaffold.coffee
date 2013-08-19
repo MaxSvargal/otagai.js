@@ -17,10 +17,10 @@ class ScaffoldGenerator
 
 	generate: (templatePath, outputPath, params) ->
 		fs.readFile templatePath, (err, data) ->
-			if err throw err
+			if err then throw err
 			compilied = _.template data, params
 			fs.writeFile outputPath, compilied, (err) ->
-				if err throw err
+				if err then throw err
 				console.log 'success write controller template'
 
 
