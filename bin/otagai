@@ -5,7 +5,7 @@ var otagai = require('../otagai'),
 	args = process.argv.slice(2);
 
 if (!args.length) {
-  console.log('Type "otagai -h" for help.\n');
+  console.log('Type "otagai help" for help.\n');
   process.exit(1);
 }
 

@@ -4,47 +4,39 @@ ncp = require('ncp').ncp || ncp.limit = 16
 
 exports.run = ->
     celeri.option
-        command: 'init'
-        description: 'Initiated application in current folder'
+        command: 'new :app'
+        description: 'Create new application in current folder'
     , (data) ->
-      initNew()
+      initNew data
 
-    if process.argv.length <= 2
-      console.log 'Type "otagai help" for information.\n'
-      process.exit 1
-    else
-      celeri.parse process.argv
+    celeri.parse process.argv
 
-initNew = ->
-    console.log "Initiated!"
-    ncp "#{__dirname}/src", process.cwd() + "/temp", (err) ->
+initNew = (data) ->
+    appFolder = process.cwd() + "/" + data.app
+    ncp "#{__dirname}/src", appFolder, (err) ->
       throw err if err
-      console.log 'Copy done!'
+      console.log "Otagai application '#{data.app}' successfully created."
+      installDependencies data.app 
 
-    ###
-    # Set {{}} variables tags for underscore template function
-    _.templateSettings =
-      interpolate : /\{\{(.+?)\}\}/g
-    fs.readFile '../src/app/controllers/articles.coffee', 'utf8', (err, data) ->
-      throw err if err
-      compiled = _.template data, {test: "HELLO, OTAGAI!"}
-      console.log compiled
-    console.log "WUT?"
+installDependencies = (app) ->
+    terminal = require('child_process').spawn('bash')
 
-    // run npm install in folder
-    var terminal = require('child_process').spawn('bash');
+    terminal.stdout.on 'data', (data) ->
+      console.log 'npm: ' + data
 
-    terminal.stdout.on('data', function (data) {
-        console.log('stdout: ' + data);
-    });
+    terminal.on 'exit', (code) ->
+      console.log 'child process exited with code ' + code
 
-    terminal.on('exit', function (code) {
-            console.log('child process exited with code ' + code);
-    });
+    setTimeout( ->
+        console.log 'Install npm dependencies...'
+        terminal.stdin.write "cd ./#{app} && npm install"
+        terminal.stdin.end()
+    , 1000)
 
-    setTimeout(function() {
-        console.log('Sending stdin to terminal');
-        terminal.stdin.write('echo "Hello $USER"');
-        terminal.stdin.end();
-    }, 1000);
-    ###
+scaffold = ->
+  # Set {{}} variables tags for underscore template function
+  _.templateSettings =
+    interpolate : /\{\{(.+?)\}\}/g
+  fs.readFile '../src/app/controllers/articles.coffee', 'utf8', (err, data) ->
+    throw err if err
+    compiled = _.template data, {test: "HELLO, OTAGAI!"}

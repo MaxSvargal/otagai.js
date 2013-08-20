@@ -4,20 +4,26 @@
 ----
 ## How to install
 
-1. Download and install [Node.js](http://nodejs.org/) and [MongoDB](http://www.mongodb.org/)
-2. Install the Node package for the grunt command line interface globally.
+1. Download and install [Node.js](http://nodejs.org/), [MongoDB](http://mongodb.org/) and [Pyton](http://python.org/) (for mongodb bson npm module).
+2. Install Otagai globally (only for dev):
+   ```sh
+   npm install -g otagai
+   ```
+
+3. Install the Node package for the grunt command line interface globally.
+   ```sh
+   npm install -g grunt-cli
+   ```
+
+4. Navigate to a directory where you have rights to create files, and type:
 
    ```sh
-   sudo npm install -g grunt-cli
+   otagai new app
    ```
+   This will create an otagai.js application called App in a directory called app and install the npm dependencies.
 
-4. Change into the Otagai.js root directory.
-5. Start the build (will install dependencies and build).
+5. Change into the app directory.
 
-   ```
-   npm install
-   ```
-   
 6. Start dev server from shell script (recommended)
    ```sh
    chmod +x ./bin/dev.sh && ./bin/dev.sh
@@ -26,6 +32,9 @@
    ```sh
    grunt
    ```
+
+## Generators
+   Coming soon...
 
 
 ## Inspiration
