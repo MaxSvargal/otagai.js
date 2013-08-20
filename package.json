@@ -7,7 +7,9 @@
     "npm": "1.2.x"
   },
   "dependencies": {
-    "better-require": "latest",
-    
+    "coffee-script": "latest",
+    "scaffolt": "latest",
+    "ncp": "latest",
+    "celeri": "latest"
   }
 }

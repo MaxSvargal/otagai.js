@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-require('better-require')();
-
-var otagai = require('../otagai')('coffee');
-	args = process.argv.slice(2)
+require("coffee-script");
+var otagai = require('../otagai'),
+	args = process.argv.slice(2);
 
 if (!args.length) {
-  console.log('Usage: node-dev [options] script [arguments]\n')
-  process.exit(1)
+  console.log('Type "otagai -h" for help.\n');
+  process.exit(1);
 }
 
-otagai(args)
+otagai.run()
