@@ -1,0 +1,28 @@
+extends ../layout
+
+block title
+  | List articles
+
+block content
+  
+  each article in articles
+  
+    .container
+      .row
+        .span12
+          h1=article.title
+      .row
+        .span2
+          small
+            p 
+              b Published
+              br
+              != dateShortMon(article.createdAt)
+          
+            p 
+              b Posted in
+              br
+              | #{article.tags}
+        .span10
+          if(article.body)
+            != marked(article.body)

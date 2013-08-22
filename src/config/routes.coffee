@@ -1,4 +1,4 @@
-module.exports = (app, passport, auth) ->
+module.exports = (app, config, passport, auth) ->
   
   # Include controllers
   fs = require 'fs'

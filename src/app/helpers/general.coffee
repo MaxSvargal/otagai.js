@@ -1,4 +1,3 @@
-
 #
 # Global template helpers
 #

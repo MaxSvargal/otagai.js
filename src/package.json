@@ -1,6 +1,6 @@
 {
   "name": "otagai",
-  "version": "0.2.0",
+  "version": "0.1.1",
   "description": "Otagai is a micro architecture application skeleton that allows you to develop websites rapidly in Node.js and Express",
   "homepage": "http://maxsvargal.com/otagai.js",
   "keywords": [
@@ -26,9 +26,29 @@
     "npm": "1.2.x"
   },
   "dependencies": {
+    "express": "latest",
+    "jade": "latest",
     "coffee-script": "latest",
-    "scaffolt": "latest",
-    "ncp": "latest",
-    "celeri": "latest"
+    "mongoose": "latest",
+    "connect-mongo": "latest",
+    "connect-assets": "latest",
+    "passport": "latest",
+    "passport-local": "latest",
+    "bcrypt": "latest",
+    "underscore": "latest",
+    "connect-flash": "latest",
+    "view-helpers": "latest",
+    "stylus": "latest",
+    "moment": "latest",
+    "marked": "latest",
+    "grunt-bg-shell": "latest",
+    "fluidity": "latest",
+    "grunt": "latest",
+    "grunt-coffeelint": "latest",
+    "node-dev": "latest",
+    "grunt-contrib-watch": "latest"
+  },
+  "devDependencies": {
+
   }
 }

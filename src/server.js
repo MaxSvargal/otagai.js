@@ -32,7 +32,7 @@ var app = express()
 require('./config/express')(app, config, passport)
 
 // Bootstrap routes
-require('./config/routes')(app, passport, auth)
+require('./config/routes')(app, config, passport, auth)
 
 // Helper funtions
 require('./app/helpers/general')(app)
@@ -40,5 +40,5 @@ require('./app/helpers/general')(app)
 // Start the app by listening on <port>
 var port = process.env.PORT || 3000
 http.createServer(app).listen(port, function(){
-  console.log('App running on port '+port)
+  console.log("\u001b[36mApp running on port " + port + "\u001b[0m")
 });

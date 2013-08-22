@@ -10,9 +10,6 @@ module.exports = (grunt) ->
         stdout: true
         stderr: true
         bg: true
-      mongo:
-        cmd: 'mongod --dbpath ./data/db'
-        bg: true
 
     watch:
       files: [
@@ -31,7 +28,6 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'default', [
     'coffeelint'
-    'bgShell:mongo'
     'bgShell:dev_server'
     'watch'
   ]
