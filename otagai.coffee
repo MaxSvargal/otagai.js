@@ -9,6 +9,12 @@ exports.run = ->
     , (data) ->
       initNew data
 
+    celeri.option
+        command: 'gen :type :name'
+        description: 'Generate scaffolded modules'
+    , (data) ->
+      generate data
+
     celeri.parse process.argv
 
 initNew = (data) ->
@@ -33,10 +39,6 @@ installDependencies = (app) ->
         terminal.stdin.end()
     , 1000)
 
-scaffold = ->
-  # Set {{}} variables tags for underscore template function
-  _.templateSettings =
-    interpolate : /\{\{(.+?)\}\}/g
-  fs.readFile '../src/app/controllers/articles.coffee', 'utf8', (err, data) ->
-    throw err if err
-    compiled = _.template data, {test: "HELLO, OTAGAI!"}
+generate = (data) ->
+  scaffold = require "#{__dirname}/scaffold/generate"
+  scaffold.controller data

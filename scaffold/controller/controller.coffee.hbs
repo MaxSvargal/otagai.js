@@ -1,0 +1,97 @@
+mongoose = require 'mongoose'
+_ = require 'underscore'
+
+{{#camelize}}{{name}}{{/camelize}} = mongoose.model '{{#camelize}}{{name}}{{/camelize}}'
+
+#
+# New {{name}} form
+#
+exports.new = (req, res) ->
+  res.render '{{name}}s/new',
+    {{name}}: new {{#camelize}}{{name}}{{/camelize}}({})
+  return
+
+#
+# Create new {{name}}
+#
+exports.create = (req, res) ->
+  {{name}} = new {{#camelize}}{{name}}{{/camelize}} req.body
+  {{name}}.save (err) ->
+    if err
+      res.render '{{name}}s/new',
+        errors: err.errors
+        {{name}}: {{name}}
+    res.redirect '/{{name}}s'
+    return
+  return
+
+exports.show = (req, res) ->
+  undefined
+
+#
+# {{#camelize}}{{name}}{{/camelize}} edit form
+#
+exports.edit = (req, res) ->
+  {{name}} = req.{{name}}
+  res.render '{{name}}s/edit',
+    {{name}}:{{name}}
+  return
+
+#
+# Update {{name}}
+#
+exports.update = (req, res) ->
+  {{name}} = req.{{name}}
+  
+  {{name}} = _.extend {{name}}, req.body
+  {{name}}.save (err) ->
+    if err
+      res.render '{{name}}s/edit',
+        {{name}}:{{name}}
+        errors: err.errors
+    else
+      req.flash 'notice', {{name}}.title + ' was successfully updated.'
+      res.redirect '/{{name}}s'
+    return
+  return
+
+#
+# Delete {{name}}
+#
+exports.destroy = (req, res) ->
+  {{name}} = req.{{name}}
+  {{name}}.remove (err) ->
+    req.flash 'notice', {{name}}.title + ' was successfully deleted.'
+    res.redirect '/{{name}}s'
+
+#
+# Manage {{name}}s
+#
+exports.manage = (req, res) ->
+  {{#camelize}}{{name}}{{/camelize}}.list (err, {{name}}s) ->
+    res.render '{{name}}s/manage',
+      {{name}}s: {{name}}s
+      message: req.flash 'notice'
+    return
+
+#
+# {{#camelize}}{{name}}{{/camelize}}s index
+#
+exports.index = (req, res) ->
+  {{#camelize}}{{name}}{{/camelize}}.list (err, {{name}}s) ->
+    res.render '{{name}}s/index',
+      {{name}}s: {{name}}s
+  return
+
+#
+# Find {{name}} by ID
+#
+exports.{{name}} = (req, res, next, id) ->
+  {{#camelize}}{{name}}{{/camelize}}.findById(id).exec (err, {{name}}) ->
+    return next err if err
+    return next new Error 'Failed to load {{name}}' if not {{name}}
+      
+    req.{{name}} = {{name}}
+    next()
+    return
+  return
