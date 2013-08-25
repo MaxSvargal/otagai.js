@@ -13,9 +13,17 @@ exports.run = ->
         command: 'gen :type :name'
         description: 'Generate scaffolded modules'
     , (data) ->
-      generate data
+      if data.type is 'scaffold'
+        celeri.prompt(
+          'Enter collection schema defined [name:type]:', 
+          (input) ->
+            celeri.exec
+        )
+      else
+        generate data
 
     celeri.parse process.argv
+    celeri.open()
 
 initNew = (data) ->
     appFolder = process.cwd() + "/" + data.app
@@ -40,5 +48,6 @@ installDependencies = (app) ->
     , 1000)
 
 generate = (data) ->
+  console.log data
   scaffold = require "#{__dirname}/scaffold/generate"
-  scaffold.controller data
+  scaffold.run data
