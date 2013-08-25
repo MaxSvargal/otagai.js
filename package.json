@@ -29,6 +29,6 @@
     "coffee-script": "latest",
     "scaffolt": "latest",
     "ncp": "latest",
-    "celeri": "latest"
+    "commander": "latest"
   }
 }

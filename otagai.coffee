@@ -1,36 +1,43 @@
 fs = require 'fs'
-celeri = require 'celeri'
+program = require 'commander'
 ncp = require('ncp').ncp || ncp.limit = 16
 
 exports.run = ->
-    celeri.option
-        command: 'new :app'
-        description: 'Create new application in current folder'
-    , (data) ->
-      initNew data
+  list = (val) ->
+    val.split ','
 
-    celeri.option
-        command: 'gen :type :name'
-        description: 'Generate scaffolded modules'
-    , (data) ->
-      if data.type is 'scaffold'
-        celeri.prompt(
-          'Enter collection schema defined [name:type]:', 
-          (input) ->
-            celeri.exec
-        )
-      else
-        generate data
+  # Main command for init new application
+  program
+    .command('new <name>')
+    .description('Create now application with <name>')
+    .action (name, options) ->
+      createNew name
 
-    celeri.parse process.argv
-    celeri.open()
+  ###
+    CLI command: 
+      otagai gen model test -f name:string,count:number
+    Types list:
+      string, number, date, buffer, boolean, mixed, objectid, array
+      More documentation: http://mongoosejs.com/docs/schematypes.html
+  ### 
+  program
+    .command('gen <type> <name>')
+    .description('Generate scaffold modules')
+    .option('-f, --fields <items>', 'Collection fields list', list)
+    .action (type, name, options) ->
+      scaffold = require "#{__dirname}/scaffold/generate"
+      scaffold.run type, name, options
 
-initNew = (data) ->
-    appFolder = process.cwd() + "/" + data.app
+  program.parse process.argv
+
+
+# Create copy of application to current folder
+createNew = (name) ->
+    appFolder = process.cwd() + "/" + name
     ncp "#{__dirname}/src", appFolder, (err) ->
       throw err if err
-      console.log "Otagai application '#{data.app}' successfully created."
-      installDependencies data.app 
+      console.log "Otagai application '#{name}' successfully created."
+      installDependencies name 
 
 installDependencies = (app) ->
     terminal = require('child_process').spawn('bash')
@@ -39,15 +46,13 @@ installDependencies = (app) ->
       console.log 'npm: ' + data
 
     terminal.on 'exit', (code) ->
-      console.log 'child process exited with code ' + code
+      if code is 0
+        console.log "Application ready. Switch to folder and run /bin/dev.sh"
+      else
+        console.log 'child process exited with code ' + code
 
     setTimeout( ->
         console.log 'Install npm dependencies...'
         terminal.stdin.write "cd ./#{app} && npm install"
         terminal.stdin.end()
     , 1000)
-
-generate = (data) ->
-  console.log data
-  scaffold = require "#{__dirname}/scaffold/generate"
-  scaffold.run data
