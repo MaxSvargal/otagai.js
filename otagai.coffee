@@ -30,7 +30,6 @@ exports.run = ->
 
   program.parse process.argv
 
-
 # Create copy of application to current folder
 createNew = (name) ->
     appFolder = process.cwd() + "/" + name

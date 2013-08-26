@@ -1,0 +1,41 @@
+mongoose = require 'mongoose'
+
+#
+# {{#camelize}}{{name}}{{/camelize}} Schema
+#
+Schema = mongoose.Schema
+
+{{#camelize}}{{name}}{{/camelize}}Schema = new Schema
+{{#each fields}}
+  {{name}}:
+    type: {{#camelize}}{{type}}{{/camelize}}
+{{/each}}
+  title:
+    type: String
+    trim: true
+    required: true
+
+  body:
+    type: String
+    required: true
+    
+  tags:
+    type: []
+    get: getTags
+    set: setTags
+    
+  createdAt:
+    type: Date
+    default: Date.now
+    
+#
+# Schema statics
+#
+{{#camelize}}{{name}}{{/camelize}}Schema.statics =
+  list: (cb) ->
+    this.find().sort
+      createdAt: -1
+    .exec(cb)
+    return
+
+{{#camelize}}{{name}}{{/camelize}} = mongoose.model '{{#camelize}}{{name}}{{/camelize}}', {{#camelize}}{{name}}{{/camelize}}Schema

@@ -29,6 +29,7 @@
     "coffee-script": "latest",
     "scaffolt": "latest",
     "ncp": "latest",
-    "commander": "latest"
+    "commander": "latest",
+    "handlebars": "latest"
   }
 }
