@@ -4,7 +4,7 @@
 ----
 ## How to install
 
-1. Download and install [Node.js](http://nodejs.org/), [MongoDB](http://mongodb.org/) and [Pyton](http://python.org/) (for mongodb bson npm module).
+1. Download and install [Node.js](http://nodejs.org/), [MongoDB](http://mongodb.org/) and [Python](http://python.org/) (for mongodb bson npm module).
 2. Install Otagai globally (only for dev):
    ```sh
    npm install -g otagai
