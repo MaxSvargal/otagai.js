@@ -1,5 +1,6 @@
 fs = require 'fs'
 program = require 'commander'
+exec = require 'child_process'
 ncp = require('ncp').ncp || ncp.limit = 16
 
 exports.run = ->
@@ -13,6 +14,14 @@ exports.run = ->
     .action (name, options) ->
       createNew name
 
+  # Alias for start shell scripts
+  # TODO: write separated realization
+  program
+    .command('server <env>')
+    .description('Start server with <environment>')
+    .action (name, options) ->
+      exec.spawn 'sh', ['-c', 'chmod +x ./bin/dev.sh && ./bin/dev.sh'], {stdio: 'inherit'}
+  
   ###
     CLI command: 
       otagai gen model test -f name:string,count:number
@@ -39,7 +48,7 @@ createNew = (name) ->
       installDependencies name 
 
 installDependencies = (app) ->
-    terminal = require('child_process').spawn('bash')
+    terminal = exec.spawn('bash')
 
     terminal.stdout.on 'data', (data) ->
       console.log 'npm: ' + data
