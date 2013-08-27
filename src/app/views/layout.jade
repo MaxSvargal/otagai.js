@@ -64,3 +64,8 @@ html(lang='en')
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")    
     != js('vendor/bootstrap')
     != js('main')
+    script
+      document.write('<script src="http://'
+      + (location.host || 'localhost').split(':')[0]
+      + ':3301/livereload.js"></'
+      + 'script>')
