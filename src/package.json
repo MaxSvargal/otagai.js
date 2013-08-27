@@ -41,7 +41,6 @@
     "stylus": "latest",
     "moment": "latest",
     "marked": "latest",
-    "grunt-bg-shell": "latest",
     "fluidity": "latest",
     "grunt": "latest",
     "grunt-coffeelint": "latest",
