@@ -78,9 +78,9 @@ exports.manage = (req, res) ->
 # Articles index
 #
 exports.index = (req, res) ->
-  Article.list (err, articles) ->
+  Article.list (err, article_list) ->
     res.render 'articles/index',
-      articles: articles
+      all_articles: article_list
   return
 
 #

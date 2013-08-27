@@ -18,12 +18,12 @@ block main
       th Email
       th Created
       th Actions
-    each user in users
+    each user in user_profiles
       tr
         td= user.name
         td= user.username
         td= user.email
-        td= user.created.toDateString()
+        td= user.created
         td
           a(href='/users/#{user.id}/edit') edit
           |  | 
