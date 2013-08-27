@@ -27,9 +27,10 @@ exports.logout = (req, res) ->
 # List users
 #
 exports.index = (req, res) ->
-  User.list (err, users) ->
+  User.list (err, user_list) ->
+    console.log user_list
     res.render 'users/index',
-      users: users
+      user_profiles: user_list
       message: req.flash 'notice'
     return
 

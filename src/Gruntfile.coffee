@@ -12,7 +12,7 @@ module.exports = (grunt) ->
         'app/views/**/*.jade'
       ]
       options:
-        livereload: true
+        livereload: 3301
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-watch'
