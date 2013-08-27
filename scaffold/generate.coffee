@@ -1,6 +1,5 @@
 'use strict'
 
-scaffolt = require 'scaffolt'
 handlebars = require 'handlebars'
 fs = require 'fs'
 basePath = process.cwd()
