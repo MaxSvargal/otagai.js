@@ -29,6 +29,7 @@
     "coffee-script": "latest",
     "ncp": "latest",
     "commander": "latest",
-    "handlebars": "latest"
+    "handlebars": "latest",
+    "mongoose": "latest"
   }
 }

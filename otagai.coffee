@@ -1,7 +1,10 @@
 fs = require 'fs'
 program = require 'commander'
 exec = require 'child_process'
+mongoose = require 'mongoose'
 ncp = require('ncp').ncp || ncp.limit = 16
+
+appDir = process.cwd()
 
 exports.run = ->
   list = (val) ->
@@ -22,6 +25,16 @@ exports.run = ->
     .action (name, options) ->
       exec.spawn 'sh', ['-c', 'chmod +x ./bin/dev.sh && ./bin/dev.sh'], {stdio: 'inherit'}
   
+  # Create superuser
+  program
+    .command('createsuperuser')
+    .option('-u, --username <username>')
+    .option('-e, --email <email>')
+    .option('-p, --password <password>')
+    .description('Create superuser with all rights for manage collections.')
+    .action (options) ->
+      createSuperUser options
+
   ###
     CLI command: 
       otagai gen model test -f name:string,count:number
@@ -41,7 +54,7 @@ exports.run = ->
 
 # Create copy of application to current folder
 createNew = (name) ->
-    appFolder = process.cwd() + "/" + name
+    appFolder = appDir + "/" + name
     ncp "#{__dirname}/src", appFolder, (err) ->
       throw err if err
       console.log "Otagai application '#{name}' successfully created."
@@ -64,3 +77,20 @@ installDependencies = (app) ->
         terminal.stdin.write "cd ./#{app} && npm install"
         terminal.stdin.end()
     , 1000)
+
+createSuperUser = (options) ->
+  require '#{appDir}/app/models/user.coffee'
+  config = require("#{appDir}/config/environment")['dev']
+  mongoose.connect config.db
+  userModel = mongoose.model 'User'
+
+  user = new userModel
+    username: options.username
+    password: options.password
+    email: options.email
+    name: options.username
+  user.save (err) ->
+    if err
+      console.log err
+    else
+      console.log 'Created superuser: ' + user.username
