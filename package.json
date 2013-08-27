@@ -1,8 +1,8 @@
 {
   "name": "otagai",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Otagai is a micro architecture application skeleton that allows you to develop websites rapidly in Node.js and Express",
-  "homepage": "http://maxsvargal.com/otagai.js",
+  "homepage": "http://otagai.maxsvargal.com",
   "keywords": [
     "skeleton",
     "architecture",
