@@ -1,0 +1,17 @@
+extends base
+
+block content
+  - var action = '/{{name}}s'
+  if (!{{name}}.isNew)
+    - action += '/'+{{name}}.id
+  
+  form(action=action, method='post')
+    if(!{{name}}.isNew)
+      input(type='hidden', name='_method', value='put')
+    {{#each fields}}
+    .form-group
+      label {{#camelize}}{{field}}{{/camelize}}
+      input.form-control(name='{{field}}', type='text', value={{../name}}.{{field}})
+    {{/each}}
+    p
+      button.btn.btn-primary(type='submit') Save {{name}}

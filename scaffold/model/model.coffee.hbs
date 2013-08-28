@@ -5,6 +5,13 @@ mongoose = require 'mongoose'
 #
 Schema = mongoose.Schema
 
+###
+# Mongoose model schema
+# Parameters for views generator
+# @module schema{{#each fields}}
+# @param [{{type}}] {{name}}{{/each}}
+###
+
 {{#camelize}}{{name}}{{/camelize}}Schema = new Schema
 {{#each fields}}  {{name}}:
     {{#equal type 'string'}}type: String{{/equal}}{{#equal type 'number'}}type: Number{{/equal}}{{#equal type 'array'}}type: []{{/equal}}{{#equal type 'date'}}type: Date{{/equal}}{{#equal type 'buffer'}}type: Buffer{{/equal}}{{#equal type 'boolean'}}type: Boolean{{/equal}}{{#equal type 'mixed'}}type: Schema.Types.Mixed{{/equal}}{{#equal type 'objectid'}}type: Schema.Types.ObjectId{{/equal}}
