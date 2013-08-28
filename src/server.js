@@ -19,9 +19,9 @@ console.log('Connecting to database at ' + config.db)
 mongoose.connect(config.db)
 
 // Bootstrap models
-var models_path = __dirname + '/app/models'
-fs.readdirSync(models_path).forEach(function (file) {
-  require(models_path+'/'+file)
+var modelsPath = __dirname + '/app/models'
+fs.readdirSync(modelsPath).forEach(function (file) {
+  require(modelsPath+'/'+file)
 });
 
 // bootstrap passport config
@@ -38,7 +38,7 @@ require('./config/routes')(app, config, passport, auth)
 require('./app/helpers/general')(app)
 
 // Start the app by listening on <port>
-var host = process.argv[2] || '0.0.0.0';
+var host = process.argv[2] || '0.0.0.0'
 var port = process.argv[3] || process.env.PORT || 3000
 http.createServer(app).listen(port, host, function(){
   console.log("\u001b[36mApp running on port " + port + "\u001b[0m")

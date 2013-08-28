@@ -27,11 +27,11 @@ exports.run = ->
   
   # Create superuser
   program
-    .command('createsuperuser')
+    .command('createuser')
     .option('-u, --username <username>')
     .option('-e, --email <email>')
     .option('-p, --password <password>')
-    .description('Create superuser with all rights for manage collections.')
+    .description('Create new user with all rights for manage collections.')
     .action (options) ->
       createSuperUser options
 
@@ -79,12 +79,15 @@ installDependencies = (app) ->
     , 1000)
 
 createSuperUser = (options) ->
-  require '#{appDir}/app/models/user.coffee'
-  config = require("#{appDir}/config/environment")['dev']
+  config = require("#{appDir}/config/environment")['development']
   mongoose.connect config.db
-  userModel = mongoose.model 'User'
 
-  user = new userModel
+  userSchema = require "#{appDir}/app/models/user"
+  console.log "IN MAIN", userSchema
+  #userModel = mongoose.model 'User'
+  User = mongoose.model 'User', userSchema
+
+  user = new User
     username: options.username
     password: options.password
     email: options.email
