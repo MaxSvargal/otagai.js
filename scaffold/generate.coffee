@@ -50,6 +50,15 @@ registerHelpers = ->
       new handlebars.SafeString camelize(options.fn(this))
   )()
 
+  handlebars.registerHelper('equal', (value, type, options) ->
+    if arguments.length < 3
+      throw new Error "Need 2 parameners"
+    if value isnt type
+      options.inverse @
+    else 
+      options.fn @
+  )
+
 writeTemplate = (templatePath, destPath, data, callback) ->
   fs.readFile templatePath, 'utf8', (err, contents) ->
     compiled = handlebars.compile contents
@@ -59,8 +68,7 @@ writeTemplate = (templatePath, destPath, data, callback) ->
 
 getFieldsObj = (fields) ->
   outFields = []
-  i = 0
-  for field in fields
+  for field, i in fields
     splitted = field.split ':'
     outFields[i] = {}
     outFields[i].name = splitted[0]

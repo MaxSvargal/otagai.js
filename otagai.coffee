@@ -31,7 +31,7 @@ exports.run = ->
     .option('-u, --username <username>')
     .option('-e, --email <email>')
     .option('-p, --password <password>')
-    .description('Create new user with all rights for manage collections.')
+    .description('Create new user with all privileges.')
     .action (options) ->
       createSuperUser options
 

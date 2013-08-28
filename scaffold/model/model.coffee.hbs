@@ -6,28 +6,9 @@ mongoose = require 'mongoose'
 Schema = mongoose.Schema
 
 {{#camelize}}{{name}}{{/camelize}}Schema = new Schema
-{{#each fields}}
-  {{name}}:
-    type: {{#camelize}}{{type}}{{/camelize}}
-{{/each}}
-  title:
-    type: String
-    trim: true
-    required: true
-
-  body:
-    type: String
-    required: true
-    
-  tags:
-    type: []
-    get: getTags
-    set: setTags
-    
-  createdAt:
-    type: Date
-    default: Date.now
-    
+{{#each fields}}  {{name}}:
+    {{#equal type 'string'}}type: String{{/equal}}{{#equal type 'number'}}type: Number{{/equal}}{{#equal type 'array'}}type: []{{/equal}}{{#equal type 'date'}}type: Date{{/equal}}{{#equal type 'buffer'}}type: Buffer{{/equal}}{{#equal type 'boolean'}}type: Boolean{{/equal}}{{#equal type 'mixed'}}type: Schema.Types.Mixed{{/equal}}{{#equal type 'objectid'}}type: Schema.Types.ObjectId{{/equal}}
+{{/each}} 
 #
 # Schema statics
 #
