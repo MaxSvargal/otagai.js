@@ -101,10 +101,6 @@ class Scaffold
       callback handlebars.compile(contents)
     
   writeTemplate: (destPath, templateFn, data, callback) ->
-    #console.log("destPath: ", destPath)
-    #console.log("templateFn: ", templateFn)
-    #console.log("data: ", data)
-    #console.log("callback: ", callback)
     if not data then data = []
     data.name = @options.name
     content = templateFn data
