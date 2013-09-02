@@ -1,0 +1,13 @@
+  
+
+  # {{#camelsize}}{{name}}{{/camelsize}} routes
+  app.get '/', {{name}}s.index
+  app.get '/{{name}}s', {{name}}s.manage
+  app.get '/{{name}}s/new', auth.requiresLogin, {{name}}s.new
+  app.get '/{{name}}s/:{{name}}Id', {{name}}s.show
+  app.post '/{{name}}s', auth.requiresLogin, {{name}}s.create
+  app.get '/{{name}}s/:{{name}}Id/edit', auth.requiresLogin, {{name}}s.edit
+  app.put '/{{name}}s/:{{name}}Id', auth.requiresLogin, {{name}}s.update
+  app.get '/{{name}}s/:{{name}}Id/destroy', auth.requiresLogin, {{name}}s.destroy
+
+  app.param '{{name}}Id', {{name}}s.{{name}}

@@ -13,11 +13,13 @@ block main
 
   table.table.table-striped
     tr
-      {{#each fields}}{{#camelize}}th {{field}}{{/camelize}}{{/each}}
+      {{#each fields}}th {{#camelize}}{{field}}{{/camelize}}
+      {{/each}}
     each {{name}} in {{name}}s
       tr
-        {{#each fields}}td= {{field}}{{/each}}
+        {{#each fields}}td= {{field}}
+        {{/each}}
         td
-          a(href='/{{name}}/#{ {{name}}.id }/edit') edit
+          a(href='/{{name}}/{{#tovar}}{{name}}.id{{/tovar}}/edit') edit
           |  | 
-          a(href='/articles/#{ {{name}}.id }/destroy', onclick='return confirm("Are you sure you want to delete this?") ? true : false') delete
+          a(href='/articles/{{#tovar}}{{name}}.id{{/tovar}}/destroy', onclick='return confirm("Are you sure you want to delete this?") ? true : false') delete

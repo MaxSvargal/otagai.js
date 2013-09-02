@@ -39,5 +39,3 @@ module.exports = (app, config, passport, auth) ->
   app.get '/articles/:articleId/destroy', auth.requiresLogin, articles.destroy
 
   app.param 'articleId', articles.article
-
-  return

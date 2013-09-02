@@ -8,9 +8,8 @@ Schema = mongoose.Schema
 ###
 # Mongoose model schema
 # Parameters for views generator
-# @module schema{{#each fields}}
-# @param [{{type}}] {{name}}{{/each}}
-###
+{{#each fields}}# @param [{{type}}] {{name}}
+{{/each}}###
 
 {{#camelize}}{{name}}{{/camelize}}Schema = new Schema
 {{#each fields}}  {{name}}:
