@@ -37,6 +37,14 @@
    ```sh
    otagai gen controller demo
    ```
+   Views:
+   ```sh
+   otagai gen views demo
+   ```
+   Scaffold (model, controller, views):
+   ```sh
+   otagai gen scaffold demo -f name:string,count:number
+   ```
 
 
 ## Inspiration
