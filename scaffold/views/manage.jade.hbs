@@ -20,6 +20,6 @@ block main
         {{#each fields}}td= {{field}}
         {{/each}}
         td
-          a(href='/{{name}}/{{#tovar}}{{name}}.id{{/tovar}}/edit') edit
+          a(href='/{{name}}s/{{#tovar}}{{name}}.id{{/tovar}}/edit') edit
           |  | 
-          a(href='/articles/{{#tovar}}{{name}}.id{{/tovar}}/destroy', onclick='return confirm("Are you sure you want to delete this?") ? true : false') delete
+          a(href='/{{name}}s/{{#tovar}}{{name}}.id{{/tovar}}/destroy', onclick='return confirm("Are you sure you want to delete this?") ? true : false') delete
