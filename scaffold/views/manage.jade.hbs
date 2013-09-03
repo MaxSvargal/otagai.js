@@ -17,7 +17,7 @@ block main
       {{/each}}th
     each {{name}} in all_{{name}}s
       tr
-        {{#each fields}}td= {{field}}
+        {{#each fields}}td= {{name}}.{{field}}
         {{/each}}
         td
           a(href='/{{name}}s/{{#tovar}}{{name}}.id{{/tovar}}/edit') edit
