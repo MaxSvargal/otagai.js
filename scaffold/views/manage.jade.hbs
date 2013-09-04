@@ -15,9 +15,9 @@ block main
     tr
       {{#each fields}}th {{#camelize}}{{field}}{{/camelize}}
       {{/each}}th
-    each {{name}} in {{name}}s
+    each {{name}} in all_{{name}}s
       tr
-        {{#each fields}}td= {{field}}
+        {{#each fields}}td= {{name}}.{{field}}
         {{/each}}
         td
           a(href='/{{name}}s/{{#tovar}}{{name}}.id{{/tovar}}/edit') edit
