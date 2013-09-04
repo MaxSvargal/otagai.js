@@ -1,6 +1,6 @@
 extends base
 
-block content
+block main
   - var action = '/users'
   if (!user.isNew)
     - action += '/'+user.id
@@ -9,25 +9,21 @@ block content
     if(!user.isNew)
       input(type='hidden', name='_method', value='put')
 
-    p
+    .form-group
       label Name
-        br
-        input.input(name='name', type='text', value=user.name)
+      input.input(name='name', type='text', value=user.name)
   
-    p
+    .form-group
       label Username
-        br
-        input(name='username', type='text', value=user.username)
+      input(name='username', type='text', value=user.username)
 
-    p
+    .form-group
       label Email
-        br
-        input(name='email', type='text', value=user.email)
+      input(name='email', type='text', value=user.email)
       
-    p
+    .form-group
       label Change password
-        br
-        input(name='password', type='password', placeholder='Type a new one to update')
+      input(name='password', type='password', placeholder='Type a new one to update')
       
-    p
+    .form-group
       button.btn.btn-primary(type='submit') Save user

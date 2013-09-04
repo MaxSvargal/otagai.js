@@ -68,9 +68,9 @@ exports.destroy = (req, res) ->
 # Manage {{name}}s
 #
 exports.manage = (req, res) ->
-  {{#camelize}}{{name}}{{/camelize}}.list (err, {{name}}s) ->
+  {{#camelize}}{{name}}{{/camelize}}.list (err, {{name}}s_list) ->
     res.render '{{name}}s/manage',
-      {{name}}s: {{name}}s
+      all_{{name}}s: {{name}}s_list
       message: req.flash 'notice'
     return
 
@@ -78,9 +78,9 @@ exports.manage = (req, res) ->
 # {{#camelize}}{{name}}{{/camelize}}s index
 #
 exports.index = (req, res) ->
-  {{#camelize}}{{name}}{{/camelize}}.list (err, {{name}}s) ->
+  {{#camelize}}{{name}}{{/camelize}}.list (err, {{name}}s_list) ->
     res.render '{{name}}s/index',
-      all_{{name}}s: {{name}}s
+      all_{{name}}s: {{name}}s_list
   return
 
 #

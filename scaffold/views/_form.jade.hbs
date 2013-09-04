@@ -1,6 +1,6 @@
 extends base
 
-block content
+block main
   - var action = '/{{name}}s'
   if (!{{name}}.isNew)
     - action += '/'+{{name}}.id
