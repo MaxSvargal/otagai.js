@@ -7,9 +7,6 @@ ncp = require('ncp').ncp || ncp.limit = 16
 appDir = process.cwd()
 
 exports.run = ->
-  list = (val) ->
-    val.split ','
-
   # Main command for init new application
   program
     .command('new <name>')
@@ -33,7 +30,7 @@ exports.run = ->
     .option('-p, --password <password>')
     .description('Create new user with all privileges.')
     .action (options) ->
-      createSuperUser options
+      createUser options
 
   ###
     CLI command: 
@@ -51,6 +48,10 @@ exports.run = ->
       scaffold.run type, name, options
 
   program.parse process.argv
+
+
+list = (val) ->
+  val.split ','
 
 # Create copy of application to current folder
 createNew = (name) ->
@@ -78,13 +79,11 @@ installDependencies = (app) ->
         terminal.stdin.end()
     , 1000)
 
-createSuperUser = (options) ->
+createUser = (options) ->
   config = require("#{appDir}/config/environment")['development']
   mongoose.connect config.db
 
   userSchema = require "#{appDir}/app/models/user"
-  console.log "IN MAIN", userSchema
-  #userModel = mongoose.model 'User'
   User = mongoose.model 'User', userSchema
 
   user = new User
