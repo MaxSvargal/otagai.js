@@ -19,8 +19,12 @@ exports.run = ->
   program
     .command('server <env>')
     .description('Start server with <environment>')
+    .option('-s, --stop', 'Stop server')
     .action (name, options) ->
-      exec.spawn 'sh', ['-c', 'chmod +x ./bin/dev.sh && ./bin/dev.sh'], {stdio: 'inherit'}
+      if options.stop is true
+        exec.exec 'killall node'
+      else
+        exec.spawn 'sh', ['-c', 'chmod +x ./bin/dev.sh && ./bin/dev.sh'], {stdio: 'inherit'}
   
   # Create superuser
   program
