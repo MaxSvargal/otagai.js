@@ -66,5 +66,4 @@ UserSchema.statics =
 
 User = mongoose.model 'User', UserSchema
 
-console.log "IN MODEL", UserSchema
 module.exports = UserSchema
