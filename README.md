@@ -1,5 +1,5 @@
 ![Otagai.js](https://dl.dropboxusercontent.com/u/931817/POST/otagai.png)
-### Otagai is an architecture application skeleton that allows you to develop websites rapidly in Node.js and Express.
+### Otagai is an architecture application skeleton and framework that allows you to develop websites rapidly in Node.js and Express.
 
 ----
 ## How to install
