@@ -1,6 +1,6 @@
-  
 
-  # {{#camelsize}}{{name}}{{/camelsize}} routes
+
+  # {{#camelize}}{{name}}{{/camelize}} routes
   app.get '/', {{name}}s.index
   app.get '/{{name}}s', {{name}}s.manage
   app.get '/{{name}}s/new', auth.requiresLogin, {{name}}s.new

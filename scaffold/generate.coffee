@@ -16,7 +16,7 @@ exports.run = (type, name, options) ->
         to: "#{basePath}/#{appPath}/models/#{name}.coffee"
       controller:
         from: "#{srcPath}/controller/controller.coffee.hbs"
-        to: "#{basePath}/#{appPath}/controllers/#{name}.coffee"
+        to: "#{basePath}/#{appPath}/controllers/#{name}s.coffee"
         routes_from: "#{srcPath}/controller/routes.coffee.hbs"
         routes_to: "#{basePath}/config/routes.coffee"
       views:

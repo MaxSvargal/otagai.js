@@ -14,11 +14,11 @@ class Scaffold
       console.log "\u001b[31m No generator type #{@options.type} \u001b[0m"
 
   scaffold: ->
-    @model()
-    @controller()
-    @views()
+    @model =>
+      @controller()
+      @views()
 
-  model: ->
+  model: (callback) ->
     getFieldsObj = (fields) ->
       outFields = []
       for field, i in fields
@@ -37,6 +37,7 @@ class Scaffold
         data
         , =>
           @successMsg @paths.model.to
+          callback()
       )
 
   controller: ->
