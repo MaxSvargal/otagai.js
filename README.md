@@ -2,6 +2,7 @@
 ### Otagai is an architecture application skeleton and framework that allows you to develop websites rapidly in Node.js and Express.
 
 ----
+See more info on [project homepage](http://otagai.maxsvargal.com)
 ## How to install
 
 1. Download and install [Node.js](http://nodejs.org/), [MongoDB](http://mongodb.org/) and [Python](http://python.org/) (for mongodb bson npm module).
