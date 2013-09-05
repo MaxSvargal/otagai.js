@@ -34,7 +34,9 @@ exports.run = ->
     .option('-p, --password <password>')
     .description('Create new user with all privileges.')
     .action (options) ->
-      createUser options
+      options.appDir = appDir
+      createUser = require "#{__dirname}/commands/create_user"
+      new createUser options
 
   ###
     CLI command: 
@@ -46,16 +48,14 @@ exports.run = ->
   program
     .command('gen <type> <name>')
     .description('Generate scaffold modules')
-    .option('-f, --fields <items>', 'Collection fields list', list)
+    .option('-f, --fields <items>', 'Collection fields list', (val) ->
+      val.split ','
+    )
     .action (type, name, options) ->
       scaffold = require "#{__dirname}/scaffold/generate"
       scaffold.run type, name, options
 
   program.parse process.argv
-
-
-list = (val) ->
-  val.split ','
 
 # Create copy of application to current folder
 createNew = (name) ->
@@ -82,21 +82,3 @@ installDependencies = (app) ->
         terminal.stdin.write "cd ./#{app} && npm install"
         terminal.stdin.end()
     , 1000)
-
-createUser = (options) ->
-  config = require("#{appDir}/config/environment")['development']
-  mongoose.connect config.db
-
-  userSchema = require "#{appDir}/app/models/user"
-  User = mongoose.model 'User', userSchema
-
-  user = new User
-    username: options.username
-    password: options.password
-    email: options.email
-    name: options.username
-  user.save (err) ->
-    if err
-      console.log err
-    else
-      console.log 'Created superuser: ' + user.username
