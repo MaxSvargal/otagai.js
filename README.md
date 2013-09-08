@@ -29,6 +29,13 @@ See more info on [project homepage](http://otagai.maxsvargal.com)
    ./bin/dev.sh
    ```
 
+## Admin user
+   ```sh
+   otagai createuser -u username -e email@adress.com -p password
+   ```
+   Creates a superuser account (a user who has all default permissions).
+   This command useful for create initial user account.
+
 ## Generators
    For generate model:
    ```sh
@@ -46,13 +53,6 @@ See more info on [project homepage](http://otagai.maxsvargal.com)
    ```sh
    otagai gen scaffold demo -f name:string,count:number
    ```
-
-## User
-   To create a new superuser:
-   ```sh
-   → otagai createuser -u username -e email@adress.com -p password
-   ```
-
 
 ## Inspiration
 Project based on [form5-node-express-mongoose-coffeescript](https://github.com/olafurnielsen/form5-node-express-mongoose-coffeescript)
