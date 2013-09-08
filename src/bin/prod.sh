@@ -11,7 +11,7 @@ if [ $1 ]; then
 		killall mongod
 
 		echo "Start mongo..."
-		mongod --dbpath data/db --logpath ./data/db/mongo.log --port 27021 &
+		mongod --dbpath data/db --logpath ./data/db/mongo.log --port 27020 &
 
 		echo "Start node..."
 		nohup node server.js &
