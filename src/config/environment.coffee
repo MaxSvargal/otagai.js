@@ -4,4 +4,4 @@ module.exports =
       name: 'Otagai.js'
     root: require('path').normalize(__dirname + '/..')
     db: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL \
-        || 'mongodb://localhost:27020/otagai'
+        || 'mongodb://localhost:27020/dev'
