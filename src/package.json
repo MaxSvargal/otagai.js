@@ -45,7 +45,9 @@
     "grunt": "latest",
     "grunt-coffeelint": "latest",
     "node-dev": "latest",
-    "grunt-contrib-watch": "latest"
+    "grunt-contrib-watch": "latest",
+    "forever-monitor": "latest",
+    "cli-color": "latest"
   },
   "devDependencies": {
 
