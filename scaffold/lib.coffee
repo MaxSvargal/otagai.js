@@ -70,6 +70,8 @@ class Scaffold
         globalRegex = /@param \[([a-z]+)\] ([a-z]+)/g
         matchRegex = /\[([a-z]+)\] ([a-z]+)/
         matches = content.match globalRegex
+        if matches is null
+          return throw "\u001b[31m No documented items in model. Try to generate model with otagai gen or scaffold command. \u001b[0m"
         results = []
         for item, i in matches
           result = item.match matchRegex
