@@ -3,8 +3,9 @@ program = require 'commander'
 exec = require 'child_process'
 mongoose = require 'mongoose'
 ncp = require('ncp').ncp || ncp.limit = 16
-
+processManager = require "#{__dirname}/commands/process_manager"
 appDir = process.cwd()
+processes = {}
 
 exports.run = ->
   # Main command for init new application
@@ -20,13 +21,24 @@ exports.run = ->
     .command('server <env>')
     .description('Start server with <environment>')
     .option('-s, --stop', 'Stop server')
-    .action (name, options) ->
-      if options.stop is true
-        exec.exec 'killall node'
+    .option('-l, --list', 'List of started apps')
+    .action (env, options) ->
+      if !processes[env]
+        processes[env] = processManager.register env, options
+      pm = processes[env]
+      if options.stop
+        pm.stop()
       else
-        exec.spawn 'sh', ['-c', 'chmod +x ./bin/dev.sh && ./bin/dev.sh'], {stdio: 'inherit'}
+        pm.start()
+
+  program
+    .command('list')
+    .description('Show list of started processes')
+    .action (options) ->
+      processManager.list()
   
-  # Create superuser
+  # Create user
+  # otagai createuser -u admin -e admin@otag.ai -p admin
   program
     .command('createuser')
     .option('-u, --username <username>')

@@ -1,0 +1,16 @@
+{
+  "root": "/Users/maxsvargal/Documents/sites/otagai.js/src",
+  "pidPath": "/Users/maxsvargal/Documents/sites/otagai.js/commands/pids",
+  "sockPath": "/Users/maxsvargal/Documents/sites/otagai.js/src/sock",
+  "loglength": 100,
+  "logstream": false,
+  "columns": [
+    "uid",
+    "command",
+    "script",
+    "forever",
+    "pid",
+    "logfile",
+    "uptime"
+  ]
+}
