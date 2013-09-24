@@ -21,21 +21,17 @@ exports.run = ->
     .command('server <env>')
     .description('Start server with <environment>')
     .option('-s, --stop', 'Stop server')
-    .option('-l, --list', 'List of started apps')
+    .option('-rs, --restart', 'Restart server')
     .action (env, options) ->
       if !processes[env]
         processes[env] = processManager.register env, options
       pm = processes[env]
-      if options.stop
+      if options.stop or env is 'stop'
         pm.stop()
+      else if options.restart or env is 'restart'
+        ps.restart()
       else
         pm.start()
-
-  program
-    .command('list')
-    .description('Show list of started processes')
-    .action (options) ->
-      processManager.list()
   
   # Create user
   # otagai createuser -u admin -e admin@otag.ai -p admin
