@@ -24,19 +24,27 @@ See more info on [project homepage](http://otagai.maxsvargal.com)
    cd app
    otagai server dev
    ```
-  **or** start from shell script
+
+## CLI usage
+### Server
+  To run application in production mode
    ```sh
-   ./bin/dev.sh
+   otagai server prod
+   ```
+   
+  To stop application (you must be in app folder)
+   ```sh
+   otagai server stop
    ```
 
-## Admin user
+### Admin user
    ```sh
    otagai createuser -u username -e email@adress.com -p password
    ```
    Creates a superuser account (a user who has all default permissions).
    This command useful for create initial user account.
 
-## Generators
+### Generators
    For generate model:
    ```sh
    otagai gen model demo -f name:string,count:number
