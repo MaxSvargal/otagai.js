@@ -1,9 +1,9 @@
 forever = require 'forever'
 spawn = require('child_process').spawn
-execFile = require('child_process').execFile
 fs = require 'fs'
 
 appDir = process.cwd()
+grunt = require "#{appDir}/node_modules/grunt"
 pkg = require "#{appDir}/package.json"
 
 class processManager
@@ -13,24 +13,24 @@ class processManager
     @name = name
     @env = env
     @options = options
-    forever.load {
-      root: "#{__dirname}/../pids"
-      pidPath: "#{__dirname}/../pids"
-      max: 10
-    }
+    forever.load { max: 10 }
 
   start: ->
-    devNode = (callback) ->
-      node = execFile "#{appDir}/node_modules/node-dev/bin/node-dev",
-        ['server'], 
-        { env: {'NODE_ENV': 'development'} },
-        (error, stdout, stderr) ->
-          console.log stdout
-          console.log stderr
-          console.log error if error
-          callback node.pid
+    startDevNode = ->
+      node = spawn "node",
+        ["#{appDir}/node_modules/node-dev/bin/node-dev", "server.js"] 
+      # { env: {'NODE_ENV': 'development'} }
+      if node.stdout
+        node.stdout.on 'data', (data) ->
+          process.stdout.write 'node: ' + data
 
-    prodNode = ->
+      if node.stderr
+        node.stderr.on 'data', (data) ->
+          process.stdout.write 'node error: ' + data
+
+      return node.pid
+
+    startProdNode = ->
       node = forever.startDaemon("#{appDir}/server.js")
       return node.pid
 
@@ -40,17 +40,14 @@ class processManager
           "--dbpath", "#{appDir}/data/db", 
           "--logpath", "#{appDir}/data/db/mongo.log"
         ],
-        {
-          detached: true
-        }
+        { detached: true }
       mongod.stderr.on 'data', (data) ->
-        console.log 'mongo error: ' + data
+        process.stdout.write 'mongo error: ' + data
       return mongod.pid
 
     startGrunt = ->
-      grunt = require("#{appDir}/node_modules/grunt")
-      grunt.tasks ['default'], {}, ->
-        grunt.log.ok "Grunt task done"
+      grunt.tasks ['default']
+      console.log '\r\n--------------------\r\n'
 
     console.log "Start app #{@name} with envionment #{@env}"
     mongopid = startMongo()
@@ -61,19 +58,18 @@ class processManager
       @writePids mongopid, nodepid
 
     if @env is 'prod'
-      nodepid = prodNode()
+      nodepid = startProdNode()
       thenDone nodepid
     if @env is 'dev'
-      devNode (pid) ->
-        thenDone pid
-        startGrunt()
-
+      nodepid = startDevNode()
+      thenDone nodepid
+      startGrunt()
 
   stop: ->
     @readPids (pids) ->
       process.kill pids.node, 'SIGHUP'
       process.kill pids.mongo, 'SIGHUP'
-      console.log "Application processes killed successfully"
+      process.stdout.write "Application processes killed successfully"
 
   restart: ->
     @stop()
@@ -93,11 +89,9 @@ class processManager
         pids.node = nodedata
         callback pids
 
+  checkProcess: (uid) ->
+    forever.findByUid uid
 
 
 exports.register = (env, options) ->
   new processManager pkg.name, env, options
-
-exports.list = (options) ->
-  forever.list true, (processes) ->
-    console.log "PROCESSES: ", processes

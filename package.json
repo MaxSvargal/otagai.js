@@ -32,7 +32,6 @@
     "handlebars": "latest",
     "mongoose": "latest",
     "chai": "latest",
-    "forever": "latest",
-    "forever-monitor": "latest"
+    "forever": "latest"
   }
 }
