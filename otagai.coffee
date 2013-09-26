@@ -4,6 +4,7 @@ exec = require 'child_process'
 mongoose = require 'mongoose'
 ncp = require('ncp').ncp || ncp.limit = 16
 processManager = require "#{__dirname}/commands/process_manager"
+scaffold = require "#{__dirname}/commands/scaffold/generate"
 appDir = process.cwd()
 processes = {}
 
@@ -60,7 +61,6 @@ exports.run = ->
       val.split ','
     )
     .action (type, name, options) ->
-      scaffold = require "#{__dirname}/scaffold/generate"
       scaffold.run type, name, options
 
   program.parse process.argv

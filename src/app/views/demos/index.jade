@@ -1,0 +1,17 @@
+extends ../layout
+
+block title
+  | List demos
+
+block content
+  
+  each demo in all_demos
+  
+    .container
+    
+      .row
+        p=demo.name
+    
+      .row
+        p=demo.count
+    

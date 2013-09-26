@@ -39,3 +39,15 @@ module.exports = (app, config, passport, auth) ->
   app.get '/articles/:articleId/destroy', auth.requiresLogin, articles.destroy
 
   app.param 'articleId', articles.article
+
+  # Demo routes
+  app.get '/', demos.index
+  app.get '/demos', demos.manage
+  app.get '/demos/new', auth.requiresLogin, demos.new
+  app.get '/demos/:demoId', demos.show
+  app.post '/demos', auth.requiresLogin, demos.create
+  app.get '/demos/:demoId/edit', auth.requiresLogin, demos.edit
+  app.put '/demos/:demoId', auth.requiresLogin, demos.update
+  app.get '/demos/:demoId/destroy', auth.requiresLogin, demos.destroy
+
+  app.param 'demoId', demos.demo

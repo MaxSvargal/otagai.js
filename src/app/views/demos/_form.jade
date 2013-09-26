@@ -1,0 +1,21 @@
+extends base
+
+block main
+  - var action = '/demos'
+  if (!demo.isNew)
+    - action += '/'+demo.id
+  
+  form(action=action, method='post')
+    if(!demo.isNew)
+      input(type='hidden', name='_method', value='put')
+    
+    .form-group
+      label Name
+      input.form-control(name='name', type='text', value=demo.name)
+    
+    .form-group
+      label Count
+      input.form-control(name='count', type='text', value=demo.count)
+    
+    p
+      button.btn.btn-primary(type='submit') Save demo
