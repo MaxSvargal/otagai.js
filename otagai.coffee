@@ -30,7 +30,7 @@ exports.run = ->
       if options.stop or env is 'stop'
         pm.stop()
       else if options.restart or env is 'restart'
-        ps.restart()
+        pm.restart()
       else
         pm.start()
   
