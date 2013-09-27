@@ -7,7 +7,7 @@ lib-cov
 *.pid
 *.gz
 
-pids
+pids/*
 logs
 results
 data/db/*
