@@ -27,6 +27,7 @@ exports.run = ->
     .description('Start server with <environment>')
     .option('-s, --stop', 'Stop server')
     .option('-rs, --restart', 'Restart server')
+    .option('-f, --force', 'Force restart with kill all node and mongo processes')
     .action (env, options) ->
       if !processes[env]
         processes[env] = processManager.register env, options
@@ -34,7 +35,9 @@ exports.run = ->
       if options.stop or env is 'stop'
         pm.stop()
       else if options.restart or env is 'restart'
-        pm.restart()
+        if options.force then force = true
+          else forse = false
+        pm.restart(force)
       else
         pm.start()
   

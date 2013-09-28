@@ -1,5 +1,5 @@
 forever = require 'forever'
-spawn = require('child_process').spawn
+child = require('child_process')
 fs = require 'fs'
 clc = require 'cli-color'
 error = clc.red.bold
@@ -21,7 +21,7 @@ class processManager
 
   start: ->
     startDevNode = ->
-      node = spawn "node",
+      node = child.spawn "node",
         ["#{appDir}/node_modules/node-dev/bin/node-dev", "server.js"] 
       # { env: {'NODE_ENV': 'development'} }
       if node.stdout
@@ -31,7 +31,8 @@ class processManager
       if node.stderr
         node.stderr.on 'data', (data) ->
           process.stdout.write error('[node error]') + data
-
+      node.on 'exit', (data) ->
+        console.log "TERMINATED", data
       return node.pid
 
     startProdNode = ->
@@ -39,7 +40,7 @@ class processManager
       return node.pid
 
     startMongo = ->
-      mongod = spawn 'mongod', 
+      mongod = child.spawn 'mongod', 
         [
           "--dbpath", "#{appDir}/data/db", 
           "--logpath", "#{appDir}/data/db/mongo.log"
@@ -64,23 +65,33 @@ class processManager
     if @env is 'prod'
       nodepid = startProdNode()
       thenDone nodepid
+      process.exit 0
     if @env is 'dev'
       nodepid = startDevNode()
       thenDone nodepid
       startGrunt()
 
   stop: ->
-    @readPids (pids) ->
     try
-      process.kill pids.node, 'SIGHUP'
-      process.kill pids.mongo, 'SIGHUP'
-      process.stdout.write success("Application processes killed successfully")
+      @readPids (pids) ->
+        process.kill pids.node, 'SIGHUP'
+        process.kill pids.mongo, 'SIGHUP'
+        console.log success("Application processes killed successfully")
+        process.exit 0
     catch
-      throw new Error error('One or more processes does not find.')
+      throw new Error error('One or more processes does not found.')
 
-  restart: ->
+  restart: (force)->
+    if force then @forceKill()
     @stop()
     @start()
+
+  forceKill: ->
+    child.exec 'killall node & killall mongod', 
+      (error, stdout, stderr) ->
+        console.log 'stdout: ' + stdout
+        console.log 'stderr: ' + stderr
+        console.log 'error: ' + error if error
 
   writePids: (mongopid, nodepid) ->
     try
@@ -88,6 +99,7 @@ class processManager
         throw err if err
       fs.writeFile @nodePidPath, nodepid, (err) ->
         throw err if err
+      return true
     catch
       throw new Error error("Write pids not possible. Check pids folder or folder permissions.")
   
@@ -103,7 +115,7 @@ class processManager
       throw new Error error("Can't read pids files")
       callback null
 
-  checkProcess: (uid) ->
+  checkProcess: (pid) ->
     forever.findByUid uid
 
 
