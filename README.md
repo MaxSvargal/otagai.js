@@ -7,7 +7,7 @@ See more info on [project homepage](http://otagai.maxsvargal.com)
 
 1. Download and install [Node.js](http://nodejs.org/), [MongoDB](http://mongodb.org/) and [Python](http://python.org/) (for mongodb bson npm module).
 
-2. Install otagai.js globally (only for development):
+2. Install otagai.js globally:
 
    ```sh
    npm install -g otagai
@@ -27,15 +27,21 @@ See more info on [project homepage](http://otagai.maxsvargal.com)
 
 ## CLI usage
 ### Server
-  To run application in production mode
+  To use these commands you must be in app folder.
+  To run application in production mode:
    ```sh
    otagai server prod
    ```
-   
-  To stop application (you must be in app folder)
+  To stop application:
    ```sh
    otagai server stop
    ```
+  To restart:
+   ```sh
+   otagai server restart
+   ```
+  You may restart server forced with ```-f``` flag.
+  This kill all node and mongo processes.
 
 ### Admin user
    ```sh
