@@ -67,27 +67,37 @@ class processManager
 
   stop: ->
     @readPids (pids) ->
+    try
       process.kill pids.node, 'SIGHUP'
       process.kill pids.mongo, 'SIGHUP'
       process.stdout.write "Application processes killed successfully"
+    catch
+      throw new Error 'One or more processes does not find.'
 
   restart: ->
     @stop()
     @start()
 
   writePids: (mongopid, nodepid) ->
-    fs.writeFile @mongoPidPath, mongopid, (err) ->
-      throw err if err
-    fs.writeFile @nodePidPath, nodepid, (err) ->
-      throw err if err
+    try
+      fs.writeFile @mongoPidPath, mongopid, (err) ->
+        throw err if err
+      fs.writeFile @nodePidPath, nodepid, (err) ->
+        throw err if err
+    catch
+      throw new Error "Write pids not possible. Check pids folder or folder permissions."
   
   readPids: (callback) ->
     pids = {}
-    fs.readFile @mongoPidPath, 'utf-8', (err, mongodata) =>
-      pids.mongo = mongodata
-      fs.readFile @nodePidPath, 'utf-8', (err, nodedata) =>
-        pids.node = nodedata
-        callback pids
+    try
+      fs.readFile @mongoPidPath, 'utf-8', (err, mongodata) =>
+        pids.mongo = mongodata
+        fs.readFile @nodePidPath, 'utf-8', (err, nodedata) =>
+          pids.node = nodedata
+          callback pids
+    catch
+      throw new Error "Can't read pids files"
+      callback null
 
   checkProcess: (uid) ->
     forever.findByUid uid
