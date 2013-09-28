@@ -32,6 +32,7 @@
     "handlebars": "latest",
     "mongoose": "latest",
     "chai": "latest",
-    "forever": "latest"
+    "forever": "latest",
+    "cli-color": "latest"
   }
 }

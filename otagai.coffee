@@ -2,11 +2,15 @@ fs = require 'fs'
 program = require 'commander'
 exec = require 'child_process'
 mongoose = require 'mongoose'
+clc = require 'cli-color'
 ncp = require('ncp').ncp || ncp.limit = 16
 processManager = require "#{__dirname}/commands/process_manager"
 scaffold = require "#{__dirname}/commands/scaffold/generate"
 appDir = process.cwd()
 processes = {}
+error = clc.red.bold
+notice = clc.cyanBright
+success = clc.green
 
 exports.run = ->
   # Main command for init new application
@@ -70,23 +74,23 @@ createNew = (name) ->
     appFolder = appDir + "/" + name
     ncp "#{__dirname}/src", appFolder, (err) ->
       throw err if err
-      console.log "Otagai application '#{name}' successfully created."
+      console.log success("Otagai application '#{name}' successfully created.")
       installDependencies name 
 
 installDependencies = (app) ->
     terminal = exec.spawn('bash')
 
     terminal.stdout.on 'data', (data) ->
-      console.log 'npm: ' + data
+      console.log notice('npm: ') + data
 
     terminal.on 'exit', (code) ->
       if code is 0
-        console.log "Application ready. Switch to folder and run /bin/dev.sh"
+        console.log success("Application ready. Switch to folder and type 'otagai server dev'")
       else
-        console.log 'child process exited with code ' + code
+        console.log error('child process exited with code ' + code)
 
     setTimeout( ->
-        console.log 'Install npm dependencies...'
+        console.log notice('Install npm dependencies...')
         terminal.stdin.write "cd ./#{app} && npm install"
         terminal.stdin.end()
     , 1000)

@@ -1,6 +1,10 @@
 forever = require 'forever'
 spawn = require('child_process').spawn
 fs = require 'fs'
+clc = require 'cli-color'
+error = clc.red.bold
+notice = clc.cyanBright
+success = clc.green
 
 appDir = process.cwd()
 grunt = require "#{appDir}/node_modules/grunt"
@@ -22,11 +26,11 @@ class processManager
       # { env: {'NODE_ENV': 'development'} }
       if node.stdout
         node.stdout.on 'data', (data) ->
-          process.stdout.write 'node: ' + data
+          process.stdout.write '[node] ' + data
 
       if node.stderr
         node.stderr.on 'data', (data) ->
-          process.stdout.write 'node error: ' + data
+          process.stdout.write error('[node error]') + data
 
       return node.pid
 
@@ -42,19 +46,19 @@ class processManager
         ],
         { detached: true }
       mongod.stderr.on 'data', (data) ->
-        process.stdout.write 'mongo error: ' + data
+        process.stdout.write error('[mongo error]') + data
       return mongod.pid
 
     startGrunt = ->
       grunt.tasks ['default']
       console.log '\r\n--------------------\r\n'
 
-    console.log "Start app #{@name} with envionment #{@env}"
+    console.log notice("Start app #{@name} with envionment #{@env}")
     mongopid = startMongo()
     console.log "Current MongoDB pid: #{mongopid}"
     thenDone = (nodepid) =>
       console.log "Current NodeJS pid: #{nodepid}"
-      console.log "Type 'otagai server stop' in current directory for stop processes"
+      console.log success("Type 'otagai server stop' in current directory for stop processes")
       @writePids mongopid, nodepid
 
     if @env is 'prod'
@@ -70,9 +74,9 @@ class processManager
     try
       process.kill pids.node, 'SIGHUP'
       process.kill pids.mongo, 'SIGHUP'
-      process.stdout.write "Application processes killed successfully"
+      process.stdout.write success("Application processes killed successfully")
     catch
-      throw new Error 'One or more processes does not find.'
+      throw new Error error('One or more processes does not find.')
 
   restart: ->
     @stop()
@@ -85,7 +89,7 @@ class processManager
       fs.writeFile @nodePidPath, nodepid, (err) ->
         throw err if err
     catch
-      throw new Error "Write pids not possible. Check pids folder or folder permissions."
+      throw new Error error("Write pids not possible. Check pids folder or folder permissions.")
   
   readPids: (callback) ->
     pids = {}
@@ -96,7 +100,7 @@ class processManager
           pids.node = nodedata
           callback pids
     catch
-      throw new Error "Can't read pids files"
+      throw new Error error("Can't read pids files")
       callback null
 
   checkProcess: (uid) ->
