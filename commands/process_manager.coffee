@@ -47,7 +47,7 @@ class processManager
         ],
         { detached: true }
       mongod.stderr.on 'data', (data) ->
-        process.stdout.write error('[mongo error]') + data
+        process.stdout.write error('[mongo error] ') + data
       return mongod.pid
 
     startGrunt = ->
@@ -66,7 +66,7 @@ class processManager
       nodepid = startProdNode()
       thenDone nodepid
       process.exit 0
-    if @env is 'dev'
+    else
       nodepid = startDevNode()
       thenDone nodepid
       startGrunt()
@@ -77,13 +77,12 @@ class processManager
         process.kill pids.node, 'SIGHUP'
         process.kill pids.mongo, 'SIGHUP'
         console.log success("Application processes killed successfully")
-        process.exit 0
     catch
       throw new Error error('One or more processes does not found.')
 
-  restart: (force)->
-    if force then @forceKill()
-    @stop()
+  restart: (force) ->
+    if force is true then @forceKill()
+    else @stop()
     @start()
 
   forceKill: ->

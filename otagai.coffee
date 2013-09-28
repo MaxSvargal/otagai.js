@@ -36,7 +36,7 @@ exports.run = ->
         pm.stop()
       else if options.restart or env is 'restart'
         if options.force then force = true
-          else forse = false
+        else forse = false
         pm.restart(force)
       else
         pm.start()
