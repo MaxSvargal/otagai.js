@@ -1,25 +1,31 @@
 {
   "name": "otagai",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Otagai is an architecture application skeleton and framework that allows you to develop websites rapidly in Node.js and Express",
   "homepage": "http://otagai.maxsvargal.com",
   "keywords": [
     "skeleton",
     "architecture",
-    "scaffolding",
+    "scaffold",
+    "make",
     "express",
+    "cli",
+    "server",
     "grunt"
   ],
   "author": {
-    "name": "MaxSvargal"
+    "name": "MaxSvargal",
+    "url": "http://maxsvargal.com"
   },
+  "homepage": "http://otagai.maxsvargal.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/MaxSvargal/otagai.js"
   },
   "license": "MIT",
-  "bin": {
-    "otagai": "./bin/otagai"
+  "main": "lib/otagai",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script --watch"
   },
   "engines": {
     "node": "0.10.x",
