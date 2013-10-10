@@ -10,7 +10,6 @@ processManager = require "#{__dirname}/utils/process_manager"
 scaffold = require "#{__dirname}/utils/scaffold/generate"
 createUser = require "#{__dirname}/utils/create_user"
 appDir = process.cwd()
-processes = {}
 error = clc.red.bold
 notice = clc.cyanBright
 success = clc.green
@@ -28,7 +27,6 @@ exports.init = ->
   program
     .command('server <command>')
     .description('Manage server processes [dev, prod, stop, restart, start <environment>]')
-    ##TODO: -dle flags
     .option('-e, --environment', 'Start server with custom environment')
     .option('-d, --database', 'Path to database on filesystem')
     .option('-l, --logs', 'Path to logs of mongo and forever')

@@ -100,7 +100,6 @@ module.exports = class ProcessManager
       node = startProdNode()
     else 
       node = startDevNode()
-      #startGrunt()
     return node
 
 
