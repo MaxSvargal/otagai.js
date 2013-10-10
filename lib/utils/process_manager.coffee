@@ -1,164 +1,157 @@
+'use strict'
+
 forever = require 'forever'
 child = require 'child_process'
 fs = require 'fs'
-clc = require 'cli-color'
-error = clc.red.bold
-notice = clc.cyanBright
-success = clc.green
+async = require 'async'
+log = require('./logger')(module)
 
-appDir = process.cwd()
-pidsPath = "#{appDir}/data/pids"
-grunt = require "#{appDir}/node_modules/grunt"
-pkg = require "#{appDir}/package.json"
-mongoPidPath = "#{appDir}/pids/mongo.pid"
-nodePidPath = "#{appDir}/pids/node.pid"
+module.exports = class ProcessManager
 
-#
-# Start server task
-#
-exports.start = (env) ->
-  startDevNode = ->
-    node = child.spawn "node",
-      ["#{appDir}/node_modules/node-dev/bin/node-dev", "server.js"] 
-    # { env: {'NODE_ENV': 'development'} }
-    if node.stdout
-      node.stdout.on 'data', (data) ->
-        process.stdout.write '[node] ' + data
+  constructor: (dir = process.cwd(), command = 'dev', options = {}) ->
+    @dir = dir
+    @command = command
+    @options = options
+    @pkg = require "#{dir}/package.json"
+    @pidsPath = "#{dir}/data/pids"
+    @pids = {}
 
-    if node.stderr
-      node.stderr.on 'data', (data) ->
-        process.stdout.write error('[node error]') + data
-    node.on 'exit', (data) ->
-      console.log "TERMINATED", data
-    return node.pid
+  start: ->
+    log.info "Start app #{@pkg.name} with envionment #{@command}"
+    async.series [
+      (callback) =>
+        @child_mongo = @startMongo()
+        @writePid 'mongo', @child_mongo.pid, ->
+          callback()
 
-  startProdNode = ->
-    forever.load { max: 10 }
-    node = forever.startDaemon("#{appDir}/server.js")
-    return node.pid
+      (callback) =>
+        @child_node = @startNode()
+        if @command is "dev"
+          @startGrunt()
+        @writePid 'node', @child_node.pid, ->
+          callback()
 
-  startMongo = ->
+      (callback) =>
+        log.info "Current MongoDB pid: #{@pids.mongo}"
+        log.info "Current NodeJS pid: #{@pids.node}"
+        log.info "Type 'otagai server stop' in current directory for stop processes"
+        callback()
+    ],
+    (err, results) ->
+      throw err if err
+      return results
+
+  stop: ->
+    processes = ['node', 'mongo']
+    async.each(
+      processes
+      , (item, callback) =>
+        @readPid item, (pid) =>
+          try
+            process.kill pid, 'SIGHUP'
+            @writePid item, "0", (status) ->
+              callback status
+          catch err 
+            throw err if err
+            log.error "Not found process with pid #{pid}"
+            callback null
+
+      , (status) ->
+        log.info "Application processes killed successfully"
+        return true
+    )
+
+  restart: (callback) ->
+    @stop (status) =>
+      console.log status
+      @start ->
+        callback() 
+
+
+  # Private class methods
+  startNode: ->
+    startDevNode = =>
+      node = child.spawn(
+        "node"
+        , ["#{@dir}/node_modules/node-dev/bin/node-dev", "#{@dir}/server.js"]
+        , { "env": {'NODE_ENV': 'development'} }
+      )
+      if node.stdout
+        node.stdout.on 'data', (data) ->
+          log.info '[node]' + data
+
+      if node.stderr
+        node.stderr.on 'data', (data) ->
+          log.error '[node error]' + data
+
+      node.on 'close', (data) ->
+        log.info '[node]' + data
+
+      @pids.node = node.pid
+      return node
+
+    startProdNode = =>
+      forever.load { max: 10 }
+      node = forever.startDaemon "#{@dir}/server.js"
+      @pids.node = node.pid
+      return node
+
+    if @command is 'prod'
+      node = startProdNode()
+    else 
+      node = startDevNode()
+    return node
+
+
+  startMongo: ->
     mongod = child.spawn 'mongod', 
       [
-        "--dbpath", "#{appDir}/data/db", 
-        "--logpath", "#{appDir}/data/db/mongo.log"
+        "--dbpath", "#{@dir}/data/db", 
+        "--logpath", "#{@dir}/data/db/mongo.log"
       ],
       { detached: true }
     mongod.stderr.on 'data', (data) ->
       process.stdout.write error('[mongo error] ') + data
-    return mongod.pid
+    @pids.mongo = mongod.pid
+    return mongod
 
-  startGrunt = ->
+  startGrunt: ->
+    grunt = require "#{@dir}/node_modules/grunt"
     grunt.tasks ['default']
-    console.log '\r\n--------------------\r\n'
 
-  console.log notice("Start app #{@name} with envionment #{@env}")
-  mongopid = startMongo()
-  console.log "Current MongoDB pid: #{mongopid}"
-  thenDone = (nodepid) =>
-    console.log "Current NodeJS pid: #{nodepid}"
-    console.log success("Type 'otagai server stop' in current directory for stop processes")
-    @writePids mongopid, nodepid
+  readPid: (name, callback) =>
+    fs.readFile "#{@pidsPath}/#{name}.pid", 'utf-8', (err, data) ->
+      if err then callback null
+      callback data
+ 
+  writePid: (pidName, pidNum, callback) =>
+    if not pidName
+      throw new Error "No name of process"
+    if not pidNum
+      throw new Error "No pid of process"
 
-  if env is 'prod'
-    nodepid = startProdNode()
-    thenDone nodepid
-    process.exit 0
-  else
-    nodepid = startDevNode()
-    thenDone nodepid
-    startGrunt()
+    fs.writeFile "#{@pidsPath}/#{pidName}.pid", pidNum, (err) ->
+      if err
+        callback throw new Error "Write pids not possible. Check pids folder or folder permissions."
+      else
+        callback true
 
+  startedCheck = (callback) ->
+    return
 
-#
-# Stop server task
-#
-exports.stop = ->
-  try
-    @readPids (pids) ->
-      process.kill pids.node, 'SIGHUP'
-      process.kill pids.mongo, 'SIGHUP'
-      console.log success("Application processes killed successfully")
-  catch error
-    throw new Error error('One or more processes does not found.')
-
-
-#
-# Restart server task
-#
-exports.restart = (force) ->
-    if force is true then @forceKill()
-    else @stop()
-    @start()
-
-    forceKill: ->
-      child.exec 'killall node & killall mongod', 
-        (error, stdout, stderr) ->
-          console.log 'stdout: ' + stdout
-          console.log 'stderr: ' + stderr
-          console.log 'error: ' + error if error
-
-    writePids: (mongopid, nodepid) ->
+  checkPidFile = (name, callback) ->
+    path = "#{@options.dir}/data/pids/#{name}.pid"
+    readPid = (callback) ->
       try
-        fs.writeFile @mongoPidPath, mongopid, (err) ->
-          throw err if err
-        fs.writeFile @nodePidPath, nodepid, (err) ->
-          throw err if err
-        return true
-      catch error
-        throw new Error error("Write pids not possible. Check pids folder or folder permissions.")
-    
-    readPids: (callback) ->
-      pids = {}
-      try
-        fs.readFile @mongoPidPath, 'utf-8', (err, mongodata) =>
-          pids.mongo = mongodata
-          fs.readFile @nodePidPath, 'utf-8', (err, nodedata) =>
-            pids.node = nodedata
-            callback pids
-      catch error
-        throw new Error error("Can't read pids files")
+        fs.readFile path, 'uif-8', (err, content) ->
+          if content isnt ""
+            callback content
+      finally
         callback null
 
-    checkProcess: (pid) ->
-      forever.findByUid uid
-
-    # TODO: test it with mocha now!
-    clearPids: ->
-      clearPid = (name) ->
-        fs.writeFile "#{pidsPath}/#{name}.pid", "", (err) ->
-          throw err if err
-      clearPid 'node'
-      clearPid 'mongo'
-
-    # TODO: test it with mocha now!
-    startedCheck: (callback) ->
-      started = false
-      @checkPidFile 'node', (pid) ->
-        if pid not null
-          started = true
-
-        @checkPidFile 'mongo', (pid) ->
-          if pid not null
-            started = true
-          else
-            started = false
-          callback started
-      
-    # TODO: test it with mocha now!
-    checkPidFile: (name, callback) ->
-      path = "#{pidsPath}/#{name}.pid"
-      readPid = (pidback) ->
-        try
-          fs.readFile path, 'uif-8', (err, content) ->
-            if content isnt ""
-              pidback content
-        finally
-          pidback null
-
-      fs.exists path, (exists) ->
-        if exists
-          readPid (pid) ->
-            callback pid
-        else
-          callback null
+    fs.exists path, (exists) ->
+      if exists
+        readPid (pid) ->
+          callback pid
+      else
+        callback null

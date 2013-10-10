@@ -27,18 +27,26 @@
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script --watch"
   },
+  "main": "lib/otagai",
+  "scripts": {
+    "test": "mocha -R spec --compilers coffee:coffee-script --require should --ui bdd --watch"
+  },
   "engines": {
     "node": "0.10.x",
     "npm": ">=1.2"
   },
   "dependencies": {
     "coffee-script": "latest",
+    "winston": "latest",
+    "async": "latest",
     "ncp": "latest",
     "commander": "latest",
     "handlebars": "latest",
     "mongoose": "latest",
     "chai": "latest",
     "forever": "latest",
-    "cli-color": "latest"
+    "cli-color": "latest",
+    "should": "latest",
+    "mocha": "latest"
   }
 }
