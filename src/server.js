@@ -39,7 +39,7 @@ require('./app/helpers/general')(app)
 
 // Start the app by listening on <port>
 var host = process.argv[2] || '0.0.0.0'
-var port = process.argv[3] || process.env.PORT || 3000
+var port = process.argv[3] || process.env.PORT || config.port || 3000
 http.createServer(app).listen(port, host, function(){
   console.log("\u001b[36mApp running on port " + port + "\u001b[0m")
 });
