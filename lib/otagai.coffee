@@ -32,7 +32,6 @@ exports.init = ->
     .option('-e, --environment', 'Start server with custom environment')
     .option('-d, --database', 'Path to database on filesystem')
     .option('-l, --logs', 'Path to logs of mongo and forever')
-    .option('-f, --force', 'Force restart with kill all node and mongo processes')
     .action (command, options) ->
       server = new processManager appDir, command, options
       switch command
