@@ -71,10 +71,11 @@ module.exports = class ProcessManager
   # Private class methods
   startNode: ->
     startDevNode = =>
-      node = child.spawn "node",
-        ["#{@dir}/node_modules/node-dev/bin/node-dev", "#{@dir}/server.js"],
-      #  { "env": [{'NODE_ENV': 'development'}] }
-
+      node = child.spawn(
+        "node"
+        , ["#{@dir}/node_modules/node-dev/bin/node-dev", "#{@dir}/server.js"]
+        , { "env": {'NODE_ENV': 'development'} }
+      )
       if node.stdout
         node.stdout.on 'data', (data) ->
           log.info '[node]' + data
