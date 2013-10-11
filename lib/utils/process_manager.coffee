@@ -52,7 +52,7 @@ module.exports = class ProcessManager
             @writePid item, "0", (status) ->
               callback status
           catch err 
-            throw err if err
+            #throw err if err
             log.error "Not found process with pid #{pid}"
             callback null
 
@@ -78,20 +78,25 @@ module.exports = class ProcessManager
       )
       if node.stdout
         node.stdout.on 'data', (data) ->
-          log.info '[node]' + data
+          log.info data
 
       if node.stderr
         node.stderr.on 'data', (data) ->
-          log.error '[node error]' + data
+          fs.appendFile "#{@dir}/logs/node_err.log", data, (err) ->
+            throw err if err
 
       node.on 'close', (data) ->
-        log.info '[node]' + data
+        fs.appendFile "#{@dir}/logs/node.log", data, (err) ->
+          throw err if err
 
       @pids.node = node.pid
       return node
 
     startProdNode = =>
-      forever.load { max: 10 }
+      forever.load { 
+        max: 10,
+        logfile: "@{dir}/logs/node_daemon.log"
+      }
       node = forever.startDaemon "#{@dir}/server.js"
       @pids.node = node.pid
       return node
@@ -110,8 +115,16 @@ module.exports = class ProcessManager
         "--logpath", "#{@dir}/data/db/mongo.log"
       ],
       { detached: true }
-    mongod.stderr.on 'data', (data) ->
-      process.stdout.write error('[mongo error] ') + data
+
+    mongod.stdout.on 'data', (data) =>
+      fs.appendFile "#{@dir}/logs/mongo.log", data, (err) ->
+        throw err if err
+
+    mongod.stderr.on 'data', (data) =>
+      fs.appendFile "#{@dir}/logs/mongo_err.log", data, (err) ->
+        throw err if err
+      log.error '[mongo error] ' + data
+
     @pids.mongo = mongod.pid
     return mongod
 
