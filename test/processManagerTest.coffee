@@ -9,20 +9,27 @@ describe 'Process Manager', ->
     pm.should.be.an.instanceof processManager
 
   it 'should be have #start', ->
-    pm.start.should.be.a 'function'
+    pm.start.should.be.a.Function
 
   describe '#start', ->
+    node = pm.startNode()
+    mongo = pm.startMongo()
+
+    it '#startMongo should return object', ->
+      node.should.be.a.Object
+
     it '#startMongo should return number pid', ->
-      mongo = pm.startMongo()
-      mongo.pid.should.be.a 'number'
+      mongo.pid.should.be.a.Number
+
+    it '#startNode should return object', ->
+      node.should.be.a.Object
 
     it '#startNode should return number pid', ->
-      node = pm.startNode()
-      node.pid.should.be.a 'number'
+      node.pid.should.be.a.Number
 
   describe '#stop', ->
     it 'should be a function', ->
-      pm.stop.should.be.a 'function'
+      pm.stop.should.be.a.Function
     ###
     it 'should return true', ->
       pm.stop (callback) ->
@@ -34,7 +41,7 @@ describe 'Process Manager', ->
 
   describe '#writePid', ->
     it 'should be a function', ->
-      pm.writePid.should.be.a 'function'
+      pm.writePid.should.be.a.Function
 
     it 'should return true', ->
       pm.writePid 'node', '101010', (callback) ->
@@ -42,7 +49,7 @@ describe 'Process Manager', ->
 
   describe '#readPid', ->
     it 'should be a Function', ->
-      pm.readPid.should.be.a 'function'
+      pm.readPid.should.be.a.Function
 
     it 'should return number pid', ->
       pm.readPid 'node', (callback) ->
