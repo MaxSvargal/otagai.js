@@ -11,6 +11,9 @@ describe 'Process Manager', ->
   it 'should be have #start', ->
     pm.start.should.be.a.Function
 
+  it 'should be have #stop', ->
+    pm.stop.should.be.a.Function
+
   describe '#start', ->
     node = pm.startNode()
     mongo = pm.startMongo()
@@ -27,17 +30,15 @@ describe 'Process Manager', ->
     it '#startNode should return number pid', ->
       node.pid.should.be.a.Number
 
+  ###
   describe '#stop', ->
-    it 'should be a function', ->
-      pm.stop.should.be.a.Function
-    ###
     it 'should return true', ->
       pm.stop (callback) ->
         callback.should.be.true
 
     it 'should not return error', ->
       pm.stop.should.not.throw()
-    ###
+  ###
 
   describe '#writePid', ->
     it 'should be a function', ->
