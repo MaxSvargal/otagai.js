@@ -23,7 +23,10 @@ module.exports = (app, config, passport) ->
   app.configure ->
     app.use(helpers(config.app.name))
     app.use(express.cookieParser())
-    app.use(express.bodyParser())
+
+    # Updated middlewares for old connect method bodyParser()
+    app.use(express.urlencoded())
+    app.use(express.json())
     
     # Support for using PUT, DEL etc. in forms using hidden _method field
     app.use(express.methodOverride())
