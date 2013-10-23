@@ -81,11 +81,11 @@ module.exports = class ProcessManager
           log.info data
 
       if node.stderr
-        node.stderr.on 'data', (data) ->
+        node.stderr.on 'data', (data) =>
           fs.appendFile "#{@dir}/logs/node_err.log", data, (err) ->
             throw err if err
 
-      node.on 'close', (data) ->
+      node.on 'close', (data) =>
         fs.appendFile "#{@dir}/logs/node.log", data, (err) ->
           throw err if err
 
@@ -112,7 +112,8 @@ module.exports = class ProcessManager
     mongod = child.spawn 'mongod', 
       [
         "--dbpath", "#{@dir}/data/db", 
-        "--logpath", "#{@dir}/data/db/mongo.log"
+        "--logpath", "#{@dir}/data/db/mongo.log",
+        #"--port", @pkg.
       ],
       { detached: true }
 
