@@ -25,7 +25,7 @@
   "license": "MIT",
   "main": "lib/otagai",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --watch"
+    "test": "mocha --compilers coffee:coffee-script"
   },
   "bin": {
     "otagai": "./bin/otagai"
